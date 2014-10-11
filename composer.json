@@ -1,0 +1,26 @@
+{
+    "name": "purekid/icbackup",
+    "description": "Increate backup script",
+    "version": "1.0.0",
+    "keywords": ["php"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael.Gan",
+            "homepage": "http://github/purekid"
+        }
+    ],
+    "require":{
+        "monolog/monolog": "~1.6"
+    },
+
+    "require-dev": {
+
+
+    },
+    "autoload": {
+        "psr-0": {
+            "Purekid\\Icbackup\\": "src"
+        }
+    }
+}
