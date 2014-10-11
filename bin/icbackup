@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /**
  * Created by PhpStorm.
@@ -15,7 +16,7 @@ if ( ! file_exists($file = __DIR__.'/../vendor/autoload.php')) {
 $configParsed = false;
 
 if(!isset($argv[1]) || !is_file($argv[1])){
-    echo "Error!No config specified\nUsage: $ php Backup.php sample.json\n";
+    echo "Error!No config specified\nUsage: $ icbackup sample.json\n";
     exit(0);
 }
 
