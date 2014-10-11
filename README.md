@@ -8,5 +8,5 @@ PHP Increasement Backup
 
 
 ```
-   php bin/Backup.php sample/config.json
+   $ ./bin/icbackup sample/config.json
 ```
