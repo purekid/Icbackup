@@ -59,9 +59,6 @@ PHP Increasement Backup 目录增量打包备份
 }
 ```
 
-```
-   $ ./bin/icbackup sample/config.json
-```
 
 待备份的目录a及其结构
 ```
