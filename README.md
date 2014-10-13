@@ -1,7 +1,7 @@
 Icbackup
 ========
 
-PHP Increasement Backup
+PHP Increasement Backup 目录增量打包备份
 
 
 ###Usage
@@ -10,3 +10,31 @@ PHP Increasement Backup
 ```
    $ ./bin/icbackup sample/config.json
 ```
+
+待备份的目录a及其结构
+```
+--a
+  └--b
+  └--c
+  ```
+  
+ 1. 假设首次运行脚本时间为2014年10月1日，生成history并打包整个a目录
+ 2. 2014年10月1日-2日之间，目录中有多了几个文件，结构如下   
+```
+--a
+  └--b
+     └--d
+  └--c
+  └--e
+```
+
+ 3. 此时再次执行脚本，会扫描相对于上次执行脚本发生的目录变化，生成增量ZIP包，a-2014-10-2-0-0.zip内文件结构如下：
+ 
+```
+--a
+  └--b
+     └--d
+  └--e
+```
+
+ 4. 若config中配置有SCP项，打包后会自动SCP到远端目录保存
