@@ -95,3 +95,22 @@ PHP Increasement Backup 目录增量打包备份
  4.若config中配置有SCP项，打包后会自动SCP到远端目录保存
 
  5.支持多线程，需要PHP支持pthreads扩展，同时讲配置中 'multiThread'设为true,'threadCount'设为使用的线程数量即可
+ 
+ 6.配置中 'ignoreUnmodifiedDir' 是很重要的一项，对性能提升很关键，举个栗子：
+ 
+ 对于一般的程序类项目，附件目录的结构一般是一致的，譬如最后一级目录存放图片的目录都名为images，存放文档的都名为docs
+ 
+ ```
+ --a
+  └--b
+     └--images
+     └--docs
+  └--c
+     └--images
+     └--docs
+  └--e
+     └--images
+     └--docs
+```
+ 
+ 此时你可以如此配置:            "ignoreUnmodifiedDir" : ["images","docs"] ,这样的作用就是当发现名为imagesdocs的目录本身未发生变化(文件夹的ftime时间)，不会进入目录里去递归扫描，对于性能会有很大提升。
