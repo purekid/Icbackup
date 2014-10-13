@@ -30,6 +30,10 @@ class Backup
 
         $this->parseConfig();
 
+        if(isset($this->config['timezone'])){
+            date_default_timezone_set($this->config['timezone']);
+        }
+
         $this->setupLogger();
 
         $this->initTasks();

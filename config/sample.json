@@ -1,6 +1,6 @@
 {
     "log" : "/var/www/backup/backup.log",
-
+    "timezone": "Asia/Shanghai",
     "tasks":[
         {
             "enable" : true,
@@ -17,14 +17,14 @@
                 "port" : "22",
                 "user" : "michael",
                 "path" : "/home/michael/backup",
-                "password" : "123456"
+                "password" : "afdsgyb"
                 },
                 {
                     "host" : "127.0.0.1",
                     "port" : "22",
                     "user" : "michael",
                     "path" : "/home/michael/backup2",
-                    "password" : "123456"
+                    "password" : "afdsgyb"
                 }
             ],
             "ignoreUnmodifiedDir":[
@@ -34,6 +34,38 @@
                 "html"
             ]
 
+        },
+        {
+            "enable" : false,
+            "multiThread" : false,
+            "threadCount" : 1,
+            "ignoreZipTimestampBefore": 1412965800,
+            "onlySaveHistory": false,
+            "name" : "client",
+            "dir" : "/_WEB/buffer-mikecrm/client",
+            "storage" : "/var/www/backup3",
+            "scp":[
+                {
+                    "host": "www.maiganerp.com",
+                    "port": "22",
+                    "path": "/_STORAGE/mikecrm/ugc/",
+                    "user": "root",
+                    "password": "maigan1ME"
+                },
+                {
+                    "host": "silentsmile.gicp.net",
+                    "port": "16222",
+                    "path": "/_STORAGE/mikecrm/ugc/",
+                    "user": "backup",
+                    "password": "d0nT10o53"
+                }
+            ],
+            "ignoreUnmodifiedDir":[
+                "formQR",
+                "html",
+                "contactQR",
+                "image"
+            ]
         }
     ]
 
