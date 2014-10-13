@@ -40,22 +40,25 @@ class Backup
 
         $runtime = round($end-$start,2);
 
-        echo "Backup Job DONE! SPENT:{$runtime}s. \n";
+        $output = "Backup Job DONE! SPENT:{$runtime}s. \n";
 
-        echo "--------------\nResult ";
-        print_r($res);
+        $output .= "--------------\nResult ";
 
-        echo "\n";
+        $output .= print_r($res,true);
 
-        $this->logger->addInfo('All tasks done,have a nice day! :P');
+        $output .= "\n";
+
+        echo $output;
+
+        $this->logger->addInfo($output);
 
     }
 
     public function initTasks(){
 
-        foreach($this->config['sections'] as $section){
-            if(isset($section['enable']) && !$section['enable']) continue;
-            $task = new Task($section);
+        foreach($this->config['tasks'] as $task_config){
+            if(isset($task_config['enable']) && !$task_config['enable']) continue;
+            $task = new Task($task_config);
             $task->logger = $this->logger;
             $this->tasks[] = $task;
         }

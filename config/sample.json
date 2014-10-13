@@ -1,12 +1,13 @@
 {
     "log" : "/var/www/backup/backup.log",
 
-    "sections":[
+    "tasks":[
         {
             "enable" : true,
-            "multi_thread" : false,
+            "multiThread" : false,
             "onlySaveHistory": true,
-            "thread_count" : 1,
+            "threadCount" : 1,
+            "ignoreZipTimestampBefore": 1412995946,
             "name" : "client",
             "dir" : "/var/www/attachment",
             "storage" : "/var/www/backup",

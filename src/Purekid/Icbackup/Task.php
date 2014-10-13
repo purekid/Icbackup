@@ -23,6 +23,8 @@ class Task
 
     public function __construct(array $config)
     {
+        $this->config = $config;
+
         $this->scp = $config['scp'];
         $this->name = $config['name'];
         $this->path = $config['dir'];
@@ -30,7 +32,7 @@ class Task
 
         // 这些文件夹比对时间戳后才决定是否访问
         if(isset($config['ignoreUnmodifiedDir'])){
-            $this->ignoreUnmodifiedDir = $config['ignoreUnmodifiedDir'];
+            $this->ignoreUnmodifiedDir = array_flip($config['ignoreUnmodifiedDir']);
         }else{
             $this->ignoreUnmodifiedDir = [];
         }
@@ -43,10 +45,10 @@ class Task
         }
 
         //是否启用多线程
-        if(!isset($config['multi_thread']) || !$config['multi_thread'] || !isset($config['thread_count'])){
+        if(!isset($config['multiThread']) || !$config['multiThread'] || !isset($config['threadCount'])){
             $this->threadCount = 1;
         }else{
-            $this->threadCount = (int) $config['thread_count'];
+            $this->threadCount = (int) $config['threadCount'];
         }
 
         //需要备份的文件夹名字
@@ -102,16 +104,18 @@ class Task
         $count_line = 0;
 
         if(file_exists($history_path)){
-            $history_content = file_get_contents($history_path);
-            $history_lines = explode("\n", $history_content);
 
-            foreach($history_lines as $line){
-                $line = trim($line);
-                if ($line) {
-                    $arr = explode("\t", $line);
-                    $history[$arr[0]] = intval($arr[1]);
-                    $count_line ++;
+            $handle = fopen($history_path, "r");
+            if ($handle) {
+                while (!feof($handle)) {
+                    $line = trim(fgets($handle, 4096));
+                    if ($line) {
+                        $arr = explode("\t", $line);
+                        $history[$arr[0]] = intval($arr[1]);
+                        $count_line ++;
+                    }
                 }
+                fclose($handle);
             }
 
         }
@@ -143,7 +147,7 @@ class Task
                     $last_update_time = filemtime($filepath);
 
                     //此文件夹是否必须检查时间戳变化来决定访问
-                    if(in_array($filename,$this->ignoreUnmodifiedDir)){
+                    if(isset($this->ignoreUnmodifiedDir[$filename])){
                         //仅扫描有变更的文件夹
                         if(!isset($this->history[$filename]) || $last_update_time > intval($this->history[$filename])){
                             $file_stack[$threadId][$filename] = $last_update_time;
@@ -179,6 +183,12 @@ class Task
             $thread->logger = $this->logger;
             $thread->ignoreUnmodifiedDir = $this->ignoreUnmodifiedDir;
             $thread->rootDir = $this->path;
+            if(!$this->isEnabledMultiThread()){
+                $thread->multiMode = false;
+            }else{
+                $thread->multiMode = true;
+            }
+
             $thread->start();
             $this->threads[] = $thread;
         }
@@ -225,12 +235,20 @@ class Task
 
         if ($zip->open($zipFilename, \ZIPARCHIVE::CREATE)) {
 
-            foreach($this->modifiedFiles as $realPath => $mtime){
+            foreach($this->modifiedFiles as $realPath => $nodeData){
+
+                $mtime = $nodeData[0];
+                $isDir = !$nodeData[1];
 
  		        //检测是否存在文件夹修改标志位，存在则证明是文件夹子元素修改，不直接打包文件夹
                 if($mtime[0] == 'e') continue;
 
-                if(is_dir($this->path . DIRECTORY_SEPARATOR . $realPath)){
+                //检测是否存在需要忽略的时间线，若存在则早于这之前的修改都忽略
+                if(isset($this->config['ignoreZipTimestampBefore']) && $this->config['ignoreZipTimestampBefore']){
+                    if($mtime < (int) $this->config['ignoreZipTimestampBefore']) continue;
+                }
+
+                if($isDir){
                     $zip->addEmptyDir( $this->rootName . DIRECTORY_SEPARATOR . $realPath);
                 }else{
                     $zip->addFile($this->path . DIRECTORY_SEPARATOR . $realPath , $this->rootName . DIRECTORY_SEPARATOR . $realPath);
@@ -262,10 +280,10 @@ class Task
 
         $history_handler = fopen($this->historyPath, 'a');
 
-        foreach($this->modifiedFiles as $realPath => $mtime){
-            $addToZip = 1;
+        foreach($this->modifiedFiles as $realPath => $nodeData){
+
+            $mtime = $nodeData[0];
             if($mtime[0] == 'e'){
-                $addToZip = 0;
                 $mtime = substr($mtime,1);
             }
             fwrite($history_handler, $realPath."\t".$mtime."\n");

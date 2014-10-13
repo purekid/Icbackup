@@ -14,6 +14,7 @@ trait ThreadTrait {
     protected $threadId = 0;
     public $modifiedFiles = [];
     public $ignoreUnmodifiedDir = [];
+    public $multiMode = false;
 
     public static function make($threadId, $files, $history, $storagePath , $sourceBackupDirPath){
 
@@ -43,7 +44,13 @@ trait ThreadTrait {
 
         $modifiedFiles = [];
 
-        $this->scanFiles($this->rootDir, $modifiedFiles, $this->files );
+        $specifyFiles = [];
+
+        if($this->multiMode){
+            $specifyFiles = $this->files;
+        }
+
+        $this->scanFiles($this->rootDir, $modifiedFiles, $specifyFiles );
 
         $this->running = false;
         $this->done = true;
@@ -85,19 +92,20 @@ trait ThreadTrait {
 
                                 //文件夹中有子项发生变化，无须加入ZIP
                                 if( $children_empty_dir_modified_tag ){
-                                    $modifiedFiles[$relpath] = 'e'.$last_update_time;
+                                    $modifiedFiles[$relpath] = ['e'.$last_update_time,0];
 
                                 //空文件夹被创建，需要加入ZIP
                                 }else{
                                     $children_empty_dir_modified = true;
-                                    $modifiedFiles[$relpath] = $last_update_time;
+                                    $modifiedFiles[$relpath] = [$last_update_time,0];
                                 }
 
                             }else{
-                                $modifiedFiles[$relpath] = $last_update_time;
+                                $modifiedFiles[$relpath] = [$last_update_time,1];
+                                $children_empty_dir_modified = true;
                             }
                         }else{
-                            if(is_dir($filepath) && !in_array($filename,$this->ignoreUnmodifiedDir)) {
+                            if(is_dir($filepath) && !isset($this->ignoreUnmodifiedDir[$filename])) {
                                 $this->scanFiles($filepath,$modifiedFiles);
                             }
                         }
