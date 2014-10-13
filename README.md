@@ -3,7 +3,7 @@ Icbackup
 
 PHP Increasement Backup 目录增量打包备份
 
-###Feature 功能点
+###Features 功能点
 - 可配置
 - 增量备份
 - 自动ZIP打包
