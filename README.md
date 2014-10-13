@@ -113,4 +113,4 @@ PHP Increasement Backup 目录增量打包备份
      └--docs
 ```
  
- 此时你可以如此配置:            "ignoreUnmodifiedDir" : ["images","docs"] ,这样的作用就是当发现名为imagesdocs的目录本身未发生变化(文件夹的ftime时间)，不会进入目录里去递归扫描，对于性能会有很大提升。
+ 此时你可以如此配置:            "ignoreUnmodifiedDir" : ["images","docs"] ,这样的作用就是当发现名为images或docs的目录本身未发生变化(文件夹的ftime时间)，不会进入目录里去递归扫描，对于性能会有很大提升。
