@@ -5,7 +5,7 @@
         {
             "enable" : true,
             "multiThread" : false,
-            "onlySaveHistory": true,
+            "onlySaveHistory": false,
             "threadCount" : 1,
             "ignoreZipTimestampBefore": 1412995946,
             "name" : "client",
