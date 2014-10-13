@@ -25,7 +25,7 @@ PHP Increasement Backup 目录增量打包备份
         {
             "enable" : true,
             "multiThread" : false,
-            "onlySaveHistory": true,
+            "onlySaveHistory": false,
             "threadCount" : 1,
             "ignoreZipTimestampBefore": 1412995946, 
             "name" : "client",
