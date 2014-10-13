@@ -5,7 +5,10 @@ PHP Increasement Backup 目录增量打包备份
 
 
 ###Usage
-
+ 
+ ```
+    $ ./bin/icbackup sample/config.json
+ ```
 
 ###Config  配置文件 (sample.json)
 ```json
