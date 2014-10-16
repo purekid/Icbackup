@@ -297,7 +297,7 @@ class Task
 
         foreach($this->scp as $scp) {
 
-            $retryTimes = 0;
+            $retryTimes = $maxRetryTimes = 10;
             $retryInterval = 1;
 
             $scpHost = $scp['host'];
@@ -310,12 +310,12 @@ class Task
 
             $sshConn = ssh2_connect($scpHost, $scpPort);
             while (!$sshConn) {
-                if ($retryTimes < 10) {
-                    $this->logger->addInfo("[" . date('Y-m-d H:i:s') . "] CONNECTING TO " . $scpHost . ":" . $scpPort . "  " . $this->name . " ... ");
+                if ($retryTimes < $maxRetryTimes) {
+                    $this->logger->addInfo("[CONNECTION FAILED] ... try in " . $retryInterval . " seconds\n");
+                    sleep($retryInterval);
                 }
-                $this->logger->addInfo("[CONNECTION FAILED] ... try in " . $retryInterval . " seconds\n");
-                sleep($retryInterval);
 
+                $this->logger->addInfo("[" . date('Y-m-d H:i:s') . "] CONNECTING TO " . $scpHost . ":" . $scpPort . "  " . $this->name . " ... ");
                 $sshConn = ssh2_connect($scpHost, $scpPort);
                 $retryInterval *= 2;
                 $retryTimes--;
@@ -324,9 +324,8 @@ class Task
                 }
             }
             if ($sshConn) {
-                if ($retryTimes < 10) {
-                    $this->logger->addInfo("[" . date('Y-m-d H:i:s') . "] TRANSFERING TO " . $scpHost . ":" . $scpPort . "  " . $this->name . " ... ");
-                }
+
+                $this->logger->addInfo("[" . date('Y-m-d H:i:s') . "] TRANSFERING TO " . $scpHost . ":" . $scpPort . "  " . $this->name . " ... ");
                 if (ssh2_auth_password($sshConn, $scpUser, $scpPassword)) {
 
                     $zipName = basename($zipFilePath);
