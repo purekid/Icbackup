@@ -48,9 +48,9 @@
                 {
                     "host": "www.maiganerp.com",
                     "port": "22",
-                    "path": "/_STORAGE/mikecrm/ugc/",
+                    "path": "/storage",
                     "user": "root",
-                    "password": "maigan1ME"
+                    "password": "test"
                 },
                 {
                     "host": "test",
