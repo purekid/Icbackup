@@ -53,11 +53,11 @@
                     "password": "maigan1ME"
                 },
                 {
-                    "host": "silentsmile.gicp.net",
-                    "port": "16222",
+                    "host": "test",
+                    "port": "21",
                     "path": "/_STORAGE/mikecrm/ugc/",
                     "user": "backup",
-                    "password": "d0nT10o53"
+                    "password": "test"
                 }
             ],
             "ignoreUnmodifiedDir":[
