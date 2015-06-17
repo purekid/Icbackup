@@ -46,7 +46,7 @@
             "storage" : "/var/www/backup3",
             "scp":[
                 {
-                    "host": "www.maiganerp.com",
+                    "host": "hostA",
                     "port": "22",
                     "path": "/storage",
                     "user": "root",
