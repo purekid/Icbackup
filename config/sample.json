@@ -17,14 +17,14 @@
                 "port" : "22",
                 "user" : "michael",
                 "path" : "/home/michael/backup",
-                "password" : "afdsgyb"
+                "password" : "password"
                 },
                 {
                     "host" : "127.0.0.1",
                     "port" : "22",
                     "user" : "michael",
                     "path" : "/home/michael/backup2",
-                    "password" : "afdsgyb"
+                    "password" : "password"
                 }
             ],
             "ignoreUnmodifiedDir":[
